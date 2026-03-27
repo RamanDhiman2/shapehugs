@@ -1,3 +1,28 @@
+<?php
+include('../../db_config.php');
+
+if (isset($_POST['Welcome'])) {
+    $email = $_POST['email'];
+    $pass = $_POST['pass'];
+    $rem = $_POST['remember'];
+    $select = "SELECT * FROM tb_users where email = '$email' and password = '$pass'";
+    $ypass = false;
+    $res = mysqli_query($con , $select);
+    if($row = mysqli_num_rows($res) > 0){
+        header("location: ../../index.php");
+        $_SESSION['email'] = $email;
+        $_SESSION['pass'] = $pass;
+        $ypass = true;
+        } else{
+            $ypass = false;
+            
+       }
+    }
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,22 +37,98 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../../assets/css/style.css">
     <style>
-        .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 60px 20px; background: var(--primary-bg); }
-        .auth-card { background: #fff; width: 100%; max-width: 450px; padding: 50px 40px; border-radius: 8px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-color); }
-        .auth-header { text-align: center; margin-bottom: 30px; }
-        .auth-header h2 { font-size: 28px; margin-bottom: 10px; }
-        .auth-header p { color: var(--muted-text); font-size: 14px; }
-        .auth-btn { width: 100%; padding: 15px; background: var(--text-color); color: #fff; border: none; font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; cursor: pointer; border-radius: 4px; transition: var(--transition); margin-top: 10px; }
-        .auth-btn:hover { background: var(--accent-color); }
-        .auth-links { margin-top: 25px; text-align: center; font-size: 13px; color: var(--muted-text); }
-        .auth-links a { color: var(--text-color); font-weight: 600; text-decoration: underline; }
-        .auth-links a:hover { color: var(--accent-color); }
-        .auth-extra { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 12px; }
-        .auth-extra a { color: var(--muted-text); text-decoration: underline; }
-        .auth-extra a:hover { color: var(--text-color); }
-        
-        .form-group input.invalid { border-color: #d9534f !important; }
-        
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            background: var(--primary-bg);
+        }
+
+        .auth-card {
+            background: #fff;
+            width: 100%;
+            max-width: 450px;
+            padding: 50px 40px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-color);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: var(--muted-text);
+            font-size: 14px;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--text-color);
+            color: #fff;
+            border: none;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .auth-btn:hover {
+            background: var(--accent-color);
+        }
+
+        .auth-links {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--muted-text);
+        }
+
+        .auth-links a {
+            color: var(--text-color);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        .auth-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .auth-extra {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        .auth-extra a {
+            color: var(--muted-text);
+            text-decoration: underline;
+        }
+
+        .auth-extra a:hover {
+            color: var(--text-color);
+        }
+
+        .form-group input.invalid {
+            border-color: #d9534f !important;
+        }
+
         /* Notification Styles */
         .notification-container {
             position: fixed;
@@ -38,6 +139,7 @@
             flex-direction: column;
             gap: 10px;
         }
+
         .notification {
             background: #fff;
             border-left: 4px solid #d9534f;
@@ -51,14 +153,34 @@
             transform: translateX(120%);
             transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .notification.show { transform: translateX(0); }
-        .notification.success { border-left-color: #28a745; }
-        .notification i { color: #d9534f; font-size: 16px; }
-        .notification.success i { color: #28a745; }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left-color: #28a745;
+        }
+
+        .notification i {
+            color: #d9534f;
+            font-size: 16px;
+        }
+
+        .notification.success i {
+            color: #28a745;
+        }
 
         @media (max-width: 576px) {
-            .auth-card { padding: 40px 20px; border: none; box-shadow: none; }
-            .auth-page { padding: 20px 0; }
+            .auth-card {
+                padding: 40px 20px;
+                border: none;
+                box-shadow: none;
+            }
+
+            .auth-page {
+                padding: 20px 0;
+            }
         }
     </style>
 </head>
@@ -75,22 +197,22 @@
                 <h2 class="serif">Welcome Back</h2>
                 <p>Sign in to access your account</p>
             </div>
-            <form id="loginForm" novalidate>
+            <form id="loginForm" method="post">
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" id="email" placeholder="Enter your email" required>
+                    <input type="email" id="email" placeholder="Enter your email" name="email" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <input type="password" id="password" placeholder="Enter your password" name="pass" required>
                 </div>
                 <div class="auth-extra">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin: 0; font-weight: 400; text-transform: none; font-size: 12px; color: var(--text-color);">
-                        <input type="checkbox" style="width: auto; padding: 0;"> Remember me
+                        <input type="checkbox" style="width: auto; padding: 0;" name="remember"> Remember me
                     </label>
                     <a href="forgot-password.php">Forgot Password?</a>
                 </div>
-                <button type="submit" class="auth-btn">Sign In</button>
+                <button type="submit" class="auth-btn" name="Welcome">Sign In</button>
             </form>
             <div class="auth-links">
                 Don't have an account? <a href="register.php">Create Account</a>
@@ -112,20 +234,20 @@
             function showNotification(message, type = 'error') {
                 const notif = document.createElement('div');
                 notif.className = `notification ${type}`;
-                
+
                 const icon = type === 'error' ? '<i class="fa-solid fa-circle-exclamation"></i>' : '<i class="fa-solid fa-circle-check"></i>';
-                
+
                 notif.innerHTML = `
                     ${icon}
                     <span style="font-size: 13px; font-weight: 500; color: var(--text-color);">${message}</span>
                 `;
-                
+
                 notifContainer.appendChild(notif);
-                
+
                 // Trigger reflow to apply the transition
                 void notif.offsetWidth;
                 notif.classList.add('show');
-                
+
                 // Remove notification automatically
                 setTimeout(() => {
                     notif.classList.remove('show');
@@ -160,23 +282,23 @@
             passwordInput.addEventListener('input', validatePassword);
 
             form.addEventListener("submit", function(e) {
-                e.preventDefault(); 
-                
+                e.preventDefault();
+
                 const emailError = validateEmail();
                 const passwordError = validatePassword();
-                
+
                 let hasError = false;
 
                 if (emailError) {
                     showNotification(emailError);
                     hasError = true;
                 }
-                
+
                 if (passwordError) {
                     showNotification(passwordError);
                     hasError = true;
                 }
-                
+
                 if (!hasError) {
                     // Remove preventDefault and uncomment this line below when connected to your backend!
                     // form.submit();
