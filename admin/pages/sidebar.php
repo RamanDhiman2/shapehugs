@@ -8,6 +8,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
    if($res){
       $data = mysqli_fetch_assoc($res);
+    //   $data = mysqli_fetch_assoc($res);
+    //   $data = mysqli_fetch_assoc($res);
+    //   $data = mysqli_fetch_assoc($res);
+    //   $data = mysqli_fetch_assoc($res);
 
    }
 
