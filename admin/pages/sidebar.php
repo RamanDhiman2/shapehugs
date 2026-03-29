@@ -36,11 +36,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <ul class="dropdown-menu">
                 <li><a href="categories.php" class="<?php echo $current_page == 'categories.php' ? 'active' : ''; ?>">Manage Categories</a></li>
                 <li><a href="products.php">Dresses</a></li>
-                <li><a href="products.php">Tops</a></li>
-                <li><a href="products.php">Bottoms</a></li>
-                <li><a href="products.php">Accessories</a></li>
-                <li><a href="products.php">New In</a></li>
-                <li><a href="products.php">Sale</a></li>
             </ul>
         </li>
         <li class="nav-item"><a href="orders.php" class="<?php echo in_array($current_page, ['orders.php', 'order-view.php']) ? 'active' : ''; ?>"><i class="fa-solid fa-cart-shopping"></i> Orders</a></li>

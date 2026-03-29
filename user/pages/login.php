@@ -1,28 +1,36 @@
 <?php
 include('../../db_config.php');
+session_start();
+if (!isset($_SESSION['Registor_Account'])) {
+} else {
+    echo $_SESSION['Registor_Account'];
+    unset($_SESSION['Registor_Account']);
+}
 
 if (isset($_POST['Welcome'])) {
     $email = $_POST['email'];
-    $pass = $_POST['pass'];
+    $pass = md5($_POST['pass']);
     $rem = $_POST['remember'];
-    $select = "SELECT * FROM tb_users where email = '$email' and password = '$pass'";
-    $ypass = false;
-    $res = mysqli_query($con , $select);
-    if($row = mysqli_num_rows($res) > 0){
-        header("location: ../../index.php");
-        $_SESSION['email'] = $email;
-        $_SESSION['pass'] = $pass;
-        $ypass = true;
-        } else{
-            $ypass = false;
-            
-       }
+    $select = "SELECT * FROM tb_users where `Email` = '$email' AND `Password` = '$pass'";
+    $sltActive = "SELECT `activity` FROM `tb_users` Where `Email` = '$email'";
+    $resActive = mysqli_query($con, $sltActive);
+    $dataActive = mysqli_fetch_assoc($resActive);
+    $res = mysqli_query($con, $select);
+    if ($row = mysqli_num_rows($res) > 0) {
+        if ($dataActive['activity'] == 1) {
+            header("location: ../../index.php");
+            $_SESSION['email'] = $email;
+            $_SESSION['pass'] = $pass;
+        } else {
+            echo "<script>alert('Account is blocked')</script>";
+            header('location: login.php');
+        }
     }
+} else {
+    session_destroy();
+}
+
 ?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,7 +57,7 @@ if (isset($_POST['Welcome'])) {
         .auth-card {
             background: #fff;
             width: 100%;
-            max-width: 450px;
+            max-width: 550px;
             padding: 50px 40px;
             border-radius: 8px;
             box-shadow: var(--shadow-soft);
@@ -200,11 +208,11 @@ if (isset($_POST['Welcome'])) {
             <form id="loginForm" method="post">
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" id="email" placeholder="Enter your email" name="email" required>
+                    <input type="email" id="email" placeholder="Enter your email" name="email">
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="password" placeholder="Enter your password" name="pass" required>
+                    <input type="password" id="password" placeholder="Enter your password" name="pass">
                 </div>
                 <div class="auth-extra">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin: 0; font-weight: 400; text-transform: none; font-size: 12px; color: var(--text-color);">
@@ -234,75 +242,51 @@ if (isset($_POST['Welcome'])) {
             function showNotification(message, type = 'error') {
                 const notif = document.createElement('div');
                 notif.className = `notification ${type}`;
-
                 const icon = type === 'error' ? '<i class="fa-solid fa-circle-exclamation"></i>' : '<i class="fa-solid fa-circle-check"></i>';
-
                 notif.innerHTML = `
                     ${icon}
                     <span style="font-size: 13px; font-weight: 500; color: var(--text-color);">${message}</span>
                 `;
-
                 notifContainer.appendChild(notif);
-
-                // Trigger reflow to apply the transition
                 void notif.offsetWidth;
                 notif.classList.add('show');
-
-                // Remove notification automatically
                 setTimeout(() => {
                     notif.classList.remove('show');
                     setTimeout(() => notif.remove(), 300);
                 }, 3000);
             }
 
+            function validateField(input, validator) {
+                const error = validator();
+                if (error) {
+                    input.classList.add('invalid');
+                } else {
+                    input.classList.remove('invalid');
+                }
+                return error;
+            }
+
             const validateEmail = () => {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (emailInput.value.trim() === '') {
-                    emailInput.classList.add('invalid');
-                    return 'Email is required.';
-                } else if (!emailRegex.test(emailInput.value.trim())) {
-                    emailInput.classList.add('invalid');
-                    return 'Please enter a valid email address.';
-                }
-                emailInput.classList.remove('invalid');
+                if (emailInput.value.trim() === '') return 'Email is required.';
+                if (!emailRegex.test(emailInput.value.trim())) return 'Please enter a valid email address.';
                 return '';
             };
 
             const validatePassword = () => {
-                if (passwordInput.value === '') {
-                    passwordInput.classList.add('invalid');
-                    return 'Password is required.';
-                }
-                passwordInput.classList.remove('invalid');
+                if (passwordInput.value === '') return 'Password is required.';
                 return '';
             };
 
-            // Lively validation on input event
-            emailInput.addEventListener('input', validateEmail);
-            passwordInput.addEventListener('input', validatePassword);
-
             form.addEventListener("submit", function(e) {
-                e.preventDefault();
+                const errors = [
+                    validateField(emailInput, validateEmail),
+                    validateField(passwordInput, validatePassword)
+                ].filter(Boolean); // Filter out empty strings
 
-                const emailError = validateEmail();
-                const passwordError = validatePassword();
-
-                let hasError = false;
-
-                if (emailError) {
-                    showNotification(emailError);
-                    hasError = true;
-                }
-
-                if (passwordError) {
-                    showNotification(passwordError);
-                    hasError = true;
-                }
-
-                if (!hasError) {
-                    // Remove preventDefault and uncomment this line below when connected to your backend!
-                    // form.submit();
-                    showNotification('Login credentials verified!', 'success');
+                if (errors.length > 0) {
+                    e.preventDefault();
+                    errors.forEach(error => showNotification(error));
                 }
             });
         });

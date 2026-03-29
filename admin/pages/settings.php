@@ -1,25 +1,29 @@
 <?php
+include('../../db_config.php');
+
 $current_page = basename($_SERVER['PHP_SELF']);
+session_start();
+
 if (isset($_POST['save'])) {
     $store = $_POST['storeName'];
     $email = $_POST['ContactEmail'];
     $opt = $_POST['cur'];
     $Ship = $_POST['freeShip'];
     $tax = $_POST['tax'];
-
-    $update = "UPDATE `tb_settings` SET 	`storeName` = '$store' , `contactEmail` = '$email' , `currency` = '$opt' , `free_ship` = '$Ship' , `tax_rate` = '$tax' `update_settings_date`";
-
+    $update = "UPDATE `tb_settings` SET `storeName` = '$store' , `contactEmail` = '$email' , `currency` = '$opt' , `free_ship` = '$Ship' , `tax_rate` = '$tax' ";
+    // echo "<pre>";print_r($update);die;
     $res1 = mysqli_query($con, $update);
-
     if ($res1) {
         echo "<script>
-            alert('Connection sus');
+            alert('Updated Successfully');
         </script>";
     } else {
         echo "<script>
-            alert('Connection Lost');
+            alert('Not Updated');
         </script>";
     }
+}else{
+    session_destroy(); 
 }
 
 include("../../db_config.php");
@@ -196,11 +200,11 @@ if ($res) {
                 <i class="fa-solid fa-bars d-lg-none" id="mobile-menu-btn" style="font-size: 24px; cursor: pointer;"></i>
                 <h1 class="serif" style="font-size: 28px; margin: 0;">Settings</h1>
             </div>
+            <form method="POST"> 
             <button class="btn-primary" style="padding: 12px 25px;" name="save">Save Changes</button>
         </div>
 
         <div class="content-card">
-            <form method="POST">
                 <h3 class="section-heading serif">General Information</h3>
                 <div class="form-group">
                     <label>Store Name</label>
@@ -213,13 +217,13 @@ if ($res) {
                 <div class="form-group">
                     <label>Currency</label>
                     <select name="cur">
-                        <option name="cur" value="USD" <?php if ($data['currency'] == $opt) {
+                        <option name="cur" value="USD" <?php if ($data['currency'] == "USD") {
                                                             echo "selected";
                                                         } ?>>USD ($)</option>
-                        <option name="cur" value="EUR" <?php if ($data['currency'] == $opt) {
+                        <option name="cur" value="EUR" <?php if ($data['currency'] == "EUR") {
                                                             echo "selected";
                                                         } ?>>EUR (€)</option>
-                        <option name="cur" value="INR" <?php if ($data['currency'] == $opt) {
+                        <option name="cur" value="INR" <?php if ($data['currency'] == "INR") {
                                                             echo "selected";
                                                         } ?>>INR (₹)</option>
                     </select>
@@ -228,11 +232,11 @@ if ($res) {
                 <h3 class="section-heading serif" style="margin-top: 40px;">Shipping & Payments</h3>
                 <div class="form-group">
                     <label>Free Shipping Threshold</label>
-                    <input type="number" value="99" name="freeShip" value="<?= $data['free_ship'] ?>">
+                    <input type="number" name="freeShip" value="<?= $data['free_ship'] ?>">
                 </div>
                 <div class="form-group">
                     <label>Tax Rate (%)</label>
-                    <input type="number" value="8.5" name="tax" value="<?= $data['tax_rate'] ?>">
+                    <input type="number" name="tax" value="<?= $data['tax_rate'] ?>">
                 </div>
             </form>
         </div>
