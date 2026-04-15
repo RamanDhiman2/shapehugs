@@ -112,7 +112,7 @@ CREATE TABLE order_items (
         ON DELETE CASCADE,
     CONSTRAINT fk_order_items_product
         FOREIGN KEY (product_id) REFERENCES products(id)
-        ON DELETE CASCADE
+        ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE INDEX idx_order_items_order ON order_items(order_id);
