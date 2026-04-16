@@ -1,3 +1,7 @@
+<?php
+$orderNumber = isset($_GET['order']) && $_GET['order'] !== '' ? htmlspecialchars($_GET['order']) : 'SH-82910';
+$orderDate = date('F d, Y');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,13 +9,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmed | Shapehugs</title>
-    <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap"
-        rel="stylesheet">
-    <!-- Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="../../assets/css/style.css">
     <style>
         .success-page {
@@ -119,18 +118,22 @@
             text-decoration: underline;
             font-weight: 500;
         }
+
         @media (max-width: 576px) {
             .success-card {
                 padding: 40px 20px;
                 box-shadow: none;
                 border: none;
             }
+
             .success-title {
                 font-size: 28px;
             }
+
             .success-page {
                 padding: 40px 10px;
             }
+
             .order-details-summary {
                 padding: 20px;
             }
@@ -139,7 +142,6 @@
 </head>
 
 <body>
-    <!-- Simple Header -->
     <header style="padding: 30px 0; border-bottom: 1px solid var(--border-color); background: #fff;">
         <div class="container" style="text-align: center;">
             <h1 class="serif" style="font-size: 28px; letter-spacing: 6px;">
@@ -153,7 +155,7 @@
             <div class="success-icon">
                 <i class="fa-solid fa-check"></i>
             </div>
-            <span class="order-number">Order #SH-82910</span>
+            <span class="order-number">Order #<?php echo $orderNumber; ?></span>
             <h1 class="serif success-title">Thank you for your order!</h1>
             <p class="success-msg">Your purchase was successful and we're getting it ready for shipment. You'll receive a confirmation email with tracking details shortly.</p>
 
@@ -161,7 +163,7 @@
                 <h4 class="serif" style="margin-bottom: 20px; font-size: 18px;">Order Details</h4>
                 <div class="detail-row">
                     <span>Order Date:</span>
-                    <span style="font-weight: 600;">March 12, 2026</span>
+                    <span style="font-weight: 600;"><?php echo $orderDate; ?></span>
                 </div>
                 <div class="detail-row">
                     <span>Shipping to:</span>
@@ -192,9 +194,13 @@
         <p class="small text-muted">&copy; 2026 Shapehugs. All Rights Reserved.</p>
     </footer>
 
-    <!-- GSAP for smooth reveal -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
+        try {
+            localStorage.removeItem('shapehugs_cart_v1');
+        } catch (error) {
+        }
+
         gsap.from(".success-card > *", {
             duration: 1,
             opacity: 0,

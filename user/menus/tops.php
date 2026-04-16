@@ -139,7 +139,7 @@
                 </div>
 
                 <!-- Product Grid -->
-                <div class="product-grid">
+                <div class="product-grid" data-api-category="tops" data-api-limit="4" data-api-replace="true">
                     <!-- Product 2 -->
                     <div class="product-card" data-id="2" data-name="White Lace Blouse" data-price="45.00" data-image="../../assets/images/p2.png">
                         <div class="product-image-wrapper">

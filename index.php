@@ -196,7 +196,7 @@
                 <p class="text-muted small text-uppercase letter-spacing-1">Most loved pieces this season</p>
             </div>
 
-            <div class="product-grid">
+            <div class="product-grid" data-api-featured="true" data-api-limit="4" data-api-replace="true">
                 <!-- Product 1 -->
                 <div class="product-card" data-id="1" data-name="The Sage Silk Midi" data-price="68.00"
                     data-image="assets/images/p1.png">

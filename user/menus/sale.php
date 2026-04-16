@@ -143,7 +143,7 @@
                 </div>
 
                 <!-- Product Grid -->
-                <div class="product-grid">
+                <div class="product-grid" data-api-collection="sale" data-api-limit="4" data-api-replace="true">
                     <div class="product-card" data-id="21" data-name="Floral Ruffle Skirt" data-price="32.00"
                         data-image="../../assets/images/p3.png">
                         <div class="product-image-wrapper">

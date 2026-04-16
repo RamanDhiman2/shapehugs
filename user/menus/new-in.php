@@ -139,7 +139,7 @@
                 </div>
 
                 <!-- Product Grid -->
-                <div class="product-grid">
+                <div class="product-grid" data-api-collection="new-in" data-api-limit="4" data-api-replace="true">
                     <div class="product-card" data-id="1" data-name="The Sage Silk Midi" data-price="68.00" data-image="../../assets/images/p1.png">
                         <div class="product-image-wrapper">
                             <span class="product-badge">New Arrival</span>

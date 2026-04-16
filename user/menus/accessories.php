@@ -139,7 +139,7 @@
                 </div>
 
                 <!-- Product Grid -->
-                <div class="product-grid">
+                <div class="product-grid" data-api-category="accessories" data-api-limit="4" data-api-replace="true">
                     <!-- Additional Mock Items for Accessories -->
                     <div class="product-card" data-id="13" data-name="Golden Pearl Earrings" data-price="28.00" data-image="../../assets/images/cat_acc.png">
                         <div class="product-image-wrapper">
